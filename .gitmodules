@@ -1,0 +1,10 @@
+[submodule "submodules/vendor/charm"]
+	path = submodules/vendor/charm
+	url = https://github.com/littensy/charm
+	branch = alien-signals
+[submodule "submodules/vendor/vide"]
+	path = submodules/vendor/vide
+	url = https://github.com/centau/vide
+[submodule "submodules/vendor/greentea"]
+	path = submodules/vendor/greentea
+	url = https://github.com/corecii/greentea

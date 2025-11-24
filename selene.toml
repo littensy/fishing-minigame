@@ -1,0 +1,6 @@
+std = "roblox"
+
+[rules]
+incorrect_standard_library_use = "allow"
+shadowing = "allow"
+mixed_table = "allow"

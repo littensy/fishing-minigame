@@ -1,0 +1,12 @@
+{
+	"name": "vendor",
+	"globIgnorePaths": ["**/__tests__"],
+	"tree": {
+		"$className": "Folder",
+		"Charm": { "$path": "./charm/packages/charm/src" },
+		"CharmSync": { "$path": "./charm/packages/charm-sync/src" },
+		"GreenTea": { "$path": "./greentea/src" },
+		"Vide": { "$path": "./vide/src" },
+		"VideCharm": { "$path": "./charm/packages/vide-charm/src" }
+	}
+}

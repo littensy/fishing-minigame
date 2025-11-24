@@ -1,0 +1,11 @@
+# Project place file
+/fishing-minigame.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+# Editor configuration files
+/.vscode
+
+sourcemap.json

@@ -1,0 +1,24 @@
+{
+	"name": "fishing-minigame",
+	"emitLegacyScripts": false,
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"src": {
+				"$className": "Folder",
+				"client": {
+					"$path": "src/client"
+				},
+				"server": {
+					"$path": "src/server"
+				},
+				"shared": {
+					"$path": "src/shared"
+				}
+			},
+			"submodules": {
+				"$path": "submodules"
+			}
+		}
+	}
+}
