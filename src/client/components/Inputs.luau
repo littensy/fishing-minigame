@@ -1,8 +1,8 @@
 local Vide = require("../../../submodules/Vide")
 local VideCharm = require("../../../submodules/VideCharm")
 local appStore = require("../stores/appStore")
-local immutable = require("../../shared/utils/immutable")
 local inputStore = require("../stores/inputStore")
+local objects = require("../../shared/utils/objects")
 local useRod = require("../hooks/useRod")
 
 local create = Vide.create
@@ -27,7 +27,7 @@ local function BoolInputAction(props: BoolInputActionProps)
 		Type = Enum.InputActionType.Bool,
 		Enabled = props.enabled,
 
-		immutable.map(props.inputs, function(input)
+		objects.map(props.inputs, function(input)
 			return create("InputBinding", {
 				Name = if input.key then input.key.Name else "UIButton",
 				KeyCode = input.key,

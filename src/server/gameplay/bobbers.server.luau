@@ -49,7 +49,7 @@ local function createBobber(character: Model): BobberInstance
 	return bobber :: BobberInstance
 end
 
-Charm.observe(fishingStore.getFishers, function(props, username)
+Charm.observe(fishingStore.getFishers, function(fisher, username)
 	local player = Players:FindFirstChild(username) :: Player?
 	local character = player and player.Character
 
@@ -82,7 +82,7 @@ Charm.observe(fishingStore.getFishers, function(props, username)
 		end
 	end)
 
-	shootBobberFromCharacter(bobber, character, props.castPower)
+	shootBobberFromCharacter(bobber, character, fisher.castPower)
 
 	return function()
 		bobber:Destroy()

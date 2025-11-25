@@ -1,5 +1,5 @@
 local Charm = require("../../../submodules/Charm")
-local immutable = require("../utils/immutable")
+local objects = require("../utils/objects")
 
 export type Fisher = {
 	seed: number,
@@ -27,20 +27,19 @@ local function getFishers()
 end
 
 local getFishersLuring = Charm.computed(function()
-	return immutable.filter(state.fishing, function(entry: Fisher)
-		return entry.poolId ~= nil and entry.fishId == nil
+	return objects.filter(state.fishing, function(fisher: Fisher)
+		return fisher.poolId ~= nil and fisher.fishId == nil
 	end) :: { [string]: FisherLuring }
 end)
 
 local getFishersReeling = Charm.computed(function()
-	return immutable.filter(state.fishing, function(entry: Fisher)
-		return entry.fishId ~= nil
+	return objects.filter(state.fishing, function(fisher: Fisher)
+		return fisher.fishId ~= nil
 	end) :: { [string]: FisherReeling }
 end)
 
-local function getReelingState(username: string): FisherReeling?
-	local entry = state.fishing[username]
-	return if entry and entry.fishId ~= nil then entry :: FisherReeling else nil
+local function getFisher(username: string): Fisher?
+	return state.fishing[username]
 end
 
 local function isFishing(username: string): boolean
@@ -48,13 +47,13 @@ local function isFishing(username: string): boolean
 end
 
 local function isLuring(username: string): boolean
-	local entry = state.fishing[username]
-	return entry ~= nil and entry.poolId ~= nil and entry.fishId == nil
+	local fisher = state.fishing[username]
+	return fisher ~= nil and fisher.poolId ~= nil and fisher.fishId == nil
 end
 
 local function isReeling(username: string): boolean
-	local entry = state.fishing[username]
-	return entry ~= nil and entry.poolId ~= nil and entry.fishId ~= nil
+	local fisher = state.fishing[username]
+	return fisher ~= nil and fisher.poolId ~= nil and fisher.fishId ~= nil
 end
 
 local function castRod(username: string, rodId: string, power: number, seed: number)
@@ -66,16 +65,16 @@ local function castRod(username: string, rodId: string, power: number, seed: num
 end
 
 local function setLuringPool(username: string, poolId: string)
-	local entry = state.fishing[username]
-	if entry then
-		entry.poolId = poolId
+	local fisher = state.fishing[username]
+	if fisher then
+		fisher.poolId = poolId
 	end
 end
 
 local function setReelingFish(username: string, fishId: string)
-	local entry = state.fishing[username]
-	if entry then
-		entry.fishId = fishId
+	local fisher = state.fishing[username]
+	if fisher then
+		fisher.fishId = fishId
 	end
 end
 
@@ -88,7 +87,7 @@ return {
 	getFishers = getFishers,
 	getFishersLuring = getFishersLuring,
 	getFishersReeling = getFishersReeling,
-	getReelingState = getReelingState,
+	getFisher = getFisher,
 	isFishing = isFishing,
 	isLuring = isLuring,
 	isReeling = isReeling,

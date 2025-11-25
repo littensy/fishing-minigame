@@ -19,7 +19,8 @@ local isReeling = Charm.computed(function()
 end)
 
 local getReelingState = Charm.computed(function()
-	return fishingStore.getReelingState(Players.LocalPlayer.Name)
+	local fisher = fishingStore.getFisher(Players.LocalPlayer.Name) :: fishingStore.FisherReeling?
+	return if fisher and fisher.fishId ~= nil then fisher else nil
 end)
 
 return {
