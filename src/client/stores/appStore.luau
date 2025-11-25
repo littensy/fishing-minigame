@@ -2,6 +2,9 @@ local Players = game:GetService("Players")
 
 local Charm = require("../../../submodules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
+local types = require("../../shared/types")
+
+local account = Charm.reactive(types.accountTemplate)
 
 local isFishing = Charm.computed(function()
 	return fishingStore.isFishing(Players.LocalPlayer.Name)
@@ -20,6 +23,7 @@ local getReelingState = Charm.computed(function()
 end)
 
 return {
+	account = account,
 	isFishing = isFishing,
 	isLuring = isLuring,
 	isReeling = isReeling,

@@ -1,12 +1,14 @@
 local Players = game:GetService("Players")
 
-local CharmSync = require("../../submodules/CharmSync")
-local fishingStore = require("../shared/stores/fishingStore")
-local remotes = require("../shared/remotes")
+local CharmSync = require("../../../submodules/CharmSync")
+local accountStore = require("../stores/accountStore")
+local fishingStore = require("../../shared/stores/fishingStore")
+local remotes = require("../../shared/remotes")
 
 local function onPlayerAdded(player: Player)
 	CharmSync.server.addSignalsToClient(player, {
 		fishing = fishingStore.state,
+		[player.Name] = accountStore.selectAccount(player.Name),
 	})
 end
 
