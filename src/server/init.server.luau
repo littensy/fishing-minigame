@@ -4,7 +4,7 @@
 ]]
 
 local destination = Instance.new("Camera")
-local source: Instance = script:FindFirstAncestor("server")
+local source: Instance = script
 
 destination.Name = source.Name
 destination.Parent = source.Parent

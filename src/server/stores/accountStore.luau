@@ -15,12 +15,6 @@ local function getAccount(username: string): Account?
 	return state.accounts[username]
 end
 
-local function selectAccount(username: string)
-	return function()
-		return state.accounts[username]
-	end
-end
-
 local function setAccount(username: string, account: Account)
 	state.accounts[username] = account
 end
@@ -29,6 +23,5 @@ return {
 	state = state,
 	getAccounts = getAccounts,
 	getAccount = getAccount,
-	selectAccount = selectAccount,
 	setAccount = setAccount,
 }

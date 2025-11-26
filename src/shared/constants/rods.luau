@@ -1,4 +1,4 @@
-export type Rod = {
+export type RodInfo = {
 	name: string,
 	description: string,
 	control: number,
@@ -7,7 +7,7 @@ export type Rod = {
 	progressSpeed: number,
 }
 
-local rods: { [string]: Rod } = {
+local rods: { [string]: RodInfo } = {
 	basic = {
 		name = "Basic Rod",
 		description = "A simple fishing rod for beginners.",

@@ -16,7 +16,7 @@ type InputProps = {
 type BoolInputActionProps = {
 	name: string,
 	enabled: () -> boolean,
-	action: (boolean) -> (),
+	action: (boolean) -> any,
 	inputs: { InputProps },
 }
 
@@ -27,7 +27,7 @@ local function BoolInputAction(props: BoolInputActionProps)
 		Type = Enum.InputActionType.Bool,
 		Enabled = props.enabled,
 
-		objects.map(props.inputs, function(input)
+		objects.map(props.inputs, function(input: InputProps)
 			return create("InputBinding", {
 				Name = if input.key then input.key.Name else "UIButton",
 				KeyCode = input.key,

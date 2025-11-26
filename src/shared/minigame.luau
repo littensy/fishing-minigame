@@ -25,8 +25,8 @@ export type MinigameState = {
 
 export type MinigameOptions = {
 	seed: number,
-	rod: rods.Rod,
-	fish: fishes.Fish,
+	rod: rods.RodInfo,
+	fish: fishes.FishInfo,
 }
 
 local GRAVITY = 3

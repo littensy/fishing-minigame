@@ -1,16 +1,18 @@
 local RunService = game:GetService("RunService")
 
 local Charm = require("../../../submodules/Charm")
-local fishes = require("../../shared/constants/fishes")
 local fishingStore = require("../../shared/stores/fishingStore")
+local pools = require("../../shared/constants/pools")
 local remotes = require("../../shared/remotes")
 local rods = require("../../shared/constants/rods")
 local stats = require("../../shared/stats")
 
+type FisherLuring = fishingStore.FisherLuring
+
 local SHAKE_COOLDOWN = 0.2
 local SHAKE_REDUCTION = 0.5
 
-Charm.observe(fishingStore.getFishersLuring, function(fisher, username)
+Charm.observe(fishingStore.getFishersLuring, function(fisher: FisherLuring, username: string)
 	local rod = rods.byId[fisher.rodId]
 	local timer = stats.getLureTime(rod.lureSpeed)
 	local cooldown = os.clock() + SHAKE_COOLDOWN
@@ -25,7 +27,7 @@ Charm.observe(fishingStore.getFishersLuring, function(fisher, username)
 	local heartbeat = RunService.Heartbeat:Connect(function(delta)
 		timer -= delta
 		if timer <= 0 then
-			fishingStore.setReelingFish(username, fishes.getRandomFishId())
+			fishingStore.setReelingFish(username, pools.getRandomFishFromPool(fisher.poolId))
 		end
 	end)
 

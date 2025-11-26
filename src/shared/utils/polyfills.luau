@@ -19,7 +19,7 @@ if not Random then
 		return math.random(min, max)
 	end
 
-	Random = RandomPolyfill
+	Random = RandomPolyfill :: never
 end
 
 return {

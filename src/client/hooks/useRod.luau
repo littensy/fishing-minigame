@@ -3,8 +3,8 @@ local rods = require("../../shared/constants/rods")
 local useCharacter = require("./useCharacter")
 local useEventListener = require("./useEventListener")
 
-local function useRod(): () -> rods.Rod?
-	local currentRod = Vide.source(nil :: rods.Rod?)
+local function useRod(): () -> rods.RodInfo?
+	local currentRod = Vide.source(nil :: rods.RodInfo?)
 	local getCharacter = useCharacter()
 
 	Vide.effect(function()
@@ -19,13 +19,13 @@ local function useRod(): () -> rods.Rod?
 			currentRod(rodId and rods.byId[rodId])
 		end
 
-		useEventListener(character.ChildAdded, function(child)
+		useEventListener(character.ChildAdded, function(child: Instance)
 			if child:IsA("Tool") then
 				updateCurrentRod()
 			end
 		end)
 
-		useEventListener(character.ChildRemoved, function(child)
+		useEventListener(character.ChildRemoved, function(child: Instance)
 			if child:IsA("Tool") then
 				updateCurrentRod()
 			end

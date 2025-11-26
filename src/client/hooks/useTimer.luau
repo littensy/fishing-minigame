@@ -15,12 +15,11 @@ local function useTimer(): Timer
 	local isRunning = Vide.source(false)
 
 	Vide.effect(function()
-		if not isRunning() then
-			return
+		if isRunning() then
+			useEventListener(RunService.Heartbeat, function(delta: number)
+				currentTime(currentTime() + delta)
+			end)
 		end
-		useEventListener(RunService.Heartbeat, function(delta)
-			currentTime(currentTime() + delta)
-		end)
 	end)
 
 	local function start()

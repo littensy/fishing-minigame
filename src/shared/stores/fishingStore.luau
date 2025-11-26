@@ -27,15 +27,15 @@ local function getFishers()
 end
 
 local getFishersLuring = Charm.computed(function()
-	return objects.filter(state.fishing, function(fisher: Fisher)
-		return fisher.poolId ~= nil and fisher.fishId == nil
-	end) :: { [string]: FisherLuring }
+	return objects.map(state.fishing, function(fisher: Fisher): FisherLuring?
+		return if fisher.poolId ~= nil and fisher.fishId == nil then fisher else nil
+	end)
 end)
 
 local getFishersReeling = Charm.computed(function()
-	return objects.filter(state.fishing, function(fisher: Fisher)
-		return fisher.fishId ~= nil
-	end) :: { [string]: FisherReeling }
+	return objects.map(state.fishing, function(fisher: Fisher): FisherReeling?
+		return if fisher.poolId ~= nil and fisher.fishId ~= nil then fisher else nil
+	end)
 end)
 
 local function getFisher(username: string): Fisher?

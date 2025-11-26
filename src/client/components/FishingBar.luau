@@ -21,7 +21,7 @@ local useSignalState = VideCharm.useSignalState
 
 local HOTBAR_INSET = 70
 
-local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Rod, fish: fishes.Fish)
+local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.RodInfo, fish: fishes.FishInfo)
 	local minigame = useMinigame(seed, rod, fish)
 	local progressSpeed = stats.getProgressSpeedPercentage(minigame.state.speed)
 
@@ -191,17 +191,14 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 end
 
 local function FishingBar()
-	local getCatchingState = useSignalState(appStore.getReelingState)
+	local isReeling = useSignalState(appStore.isReeling)
 
-	local function isCatching()
-		return getCatchingState() ~= nil
-	end
+	return show(isReeling, function()
+		local fisher = appStore.getFisher() :: appStore.FisherReeling
+		local rod = rods.byId[fisher.rodId]
+		local fish = fishes.byId[fisher.fishId]
 
-	return show(getCatchingState, function(getCatchingState)
-		local state = getCatchingState()
-		local rod = rods.byId[state.rodId]
-		local fish = fishes.byId[state.fishId]
-		return FishingBarView(isCatching, state.seed, rod, fish), 0.5
+		return FishingBarView(isReeling, fisher.seed, rod, fish), 0.5
 	end)
 end
 

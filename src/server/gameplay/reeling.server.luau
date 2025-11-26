@@ -7,7 +7,7 @@ local remotes = require("../../shared/remotes")
 local replay = require("../../shared/replay")
 local rods = require("../../shared/constants/rods")
 
-type CatchingData = fishingStore.FisherReeling
+type FisherReeling = fishingStore.FisherReeling
 type MinigameOptions = replay.MinigameOptions
 type SimulationResult = replay.SimulationResult
 
@@ -21,17 +21,17 @@ local function validateCatch(options: MinigameOptions, replayData: buffer): Simu
 	return replay.simulate(frames, inputs, options)
 end
 
-Charm.observe(fishingStore.getFishersReeling, function(data, username)
+Charm.observe(fishingStore.getFishersReeling, function(fisher: FisherReeling, username: string): (() -> ())?
 	local player = Players:FindFirstChild(username)
 
 	if not player or not player:IsA("Player") then
-		return
+		return nil
 	end
 
 	local options: MinigameOptions = {
-		seed = data.seed,
-		rod = rods.byId[data.rodId],
-		fish = fishes.byId[data.fishId],
+		seed = fisher.seed,
+		rod = rods.byId[fisher.rodId],
+		fish = fishes.byId[fisher.fishId],
 	}
 
 	local bestResult, minimumTime = replay.simulatePerfectGame(options)
@@ -46,7 +46,7 @@ Charm.observe(fishingStore.getFishersReeling, function(data, username)
 		if not caught then
 			caught = true
 			fishingStore.stopFishing(username)
-			remotes.caughtFish:FireAllClients(player, data.fishId, result == "success")
+			remotes.caughtFish:FireAllClients(player, fisher.fishId, result == "success")
 		end
 	end
 

@@ -9,8 +9,8 @@ local spring = Vide.spring
 
 type Props = {
 	text: string,
-	pressed: (boolean?) -> boolean,
-	ref: (Instance) -> (),
+	pressed: () -> boolean,
+	ref: (Instance) -> any,
 	position: UDim2 | () -> UDim2,
 	onPress: (() -> ())?,
 }

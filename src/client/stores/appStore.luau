@@ -4,6 +4,8 @@ local Charm = require("../../../submodules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
 local types = require("../../shared/types")
 
+export type FisherReeling = fishingStore.FisherReeling
+
 local account = Charm.reactive(types.accountTemplate)
 
 local isFishing = Charm.computed(function()
@@ -18,15 +20,14 @@ local isReeling = Charm.computed(function()
 	return fishingStore.isReeling(Players.LocalPlayer.Name)
 end)
 
-local getReelingState = Charm.computed(function()
-	local fisher = fishingStore.getFisher(Players.LocalPlayer.Name) :: fishingStore.FisherReeling?
-	return if fisher and fisher.fishId ~= nil then fisher else nil
-end)
+local function getFisher()
+	return fishingStore.getFisher(Players.LocalPlayer.Name)
+end
 
 return {
 	account = account,
 	isFishing = isFishing,
 	isLuring = isLuring,
 	isReeling = isReeling,
-	getReelingState = getReelingState,
+	getFisher = getFisher,
 }

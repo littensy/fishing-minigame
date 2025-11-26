@@ -4,9 +4,9 @@ local observers = require("../../shared/utils/observers")
 local remotes = require("../../shared/remotes")
 local rods = require("../../shared/constants/rods")
 
-local function connectRod(player: Player, rodId: string?)
+local function connectRod(player: Player, rodId: string?): (() -> ())?
 	if not rodId then
-		return
+		return nil
 	end
 
 	local castRod = remotes.castRod.OnServerEvent:Connect(function(sender, power)
