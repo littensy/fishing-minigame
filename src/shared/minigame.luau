@@ -1,5 +1,5 @@
 local constants = require("./constants")
-local fishes = require("./constants/fishes")
+local fishes = require("./fishes")
 local numbers = require("./utils/numbers")
 local polyfills = require("./utils/polyfills")
 local rods = require("./constants/rods")
@@ -25,8 +25,8 @@ export type MinigameState = {
 
 export type MinigameOptions = {
 	seed: number,
-	rod: rods.Rod,
-	fish: fishes.Fish,
+	rod: rods.RodInfo,
+	fish: fishes.FishInfo,
 }
 
 local GRAVITY = 3

@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 type SpringSettings<T> = ({
 	position: T?,

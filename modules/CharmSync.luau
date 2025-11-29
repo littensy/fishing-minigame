@@ -1,4 +1,4 @@
-local CharmSync = require(script.Parent.vendor.CharmSync)
+local CharmSync = require(script.Parent.submodules.CharmSync)
 
 export type SyncPayload = CharmSync.SyncPayload
 

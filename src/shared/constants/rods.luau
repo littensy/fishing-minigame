@@ -1,4 +1,4 @@
-export type Rod = {
+export type RodInfo = {
 	name: string,
 	description: string,
 	control: number,
@@ -7,7 +7,7 @@ export type Rod = {
 	progressSpeed: number,
 }
 
-local rods: { [string]: Rod } = {
+local rodsById: { [string]: RodInfo } = {
 	basic = {
 		name = "Basic Rod",
 		description = "A simple fishing rod for beginners.",
@@ -34,9 +34,13 @@ local rods: { [string]: Rod } = {
 	},
 }
 
+local function getRod(rodId: string): RodInfo
+	return assert(rodsById[rodId], `Failed to get rod {rodId}`)
+end
+
 local function getRodIdFromTool(tool: Tool): string?
-	local rodName = tool:GetAttribute("RodId")
-	return if type(rodName) == "string" and rods[rodName] then rodName else nil
+	local rodId = tool:GetAttribute("RodId")
+	return if type(rodId) == "string" and rodsById[rodId] then rodId else nil
 end
 
 local function getRodIdFromCharacter(character: Model): string?
@@ -45,7 +49,8 @@ local function getRodIdFromCharacter(character: Model): string?
 end
 
 return {
-	byId = rods,
+	rodsById = rodsById,
+	getRod = getRod,
 	getRodIdFromTool = getRodIdFromTool,
 	getRodIdFromCharacter = getRodIdFromCharacter,
 }

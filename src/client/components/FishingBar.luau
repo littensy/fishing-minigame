@@ -1,7 +1,7 @@
-local Vide = require("../../../submodules/Vide")
-local VideCharm = require("../../../submodules/VideCharm")
+local Vide = require("../../../modules/Vide")
+local VideCharm = require("../../../modules/VideCharm")
 local appStore = require("../stores/appStore")
-local fishes = require("../../shared/constants/fishes")
+local fishes = require("../../shared/fishes")
 local fonts = require("../utils/fonts")
 local inputStore = require("../stores/inputStore")
 local numbers = require("../../shared/utils/numbers")
@@ -21,7 +21,7 @@ local useSignalState = VideCharm.useSignalState
 
 local HOTBAR_INSET = 70
 
-local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Rod, fish: fishes.Fish)
+local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.RodInfo, fish: fishes.FishInfo)
 	local minigame = useMinigame(seed, rod, fish)
 	local progressSpeed = stats.getProgressSpeedPercentage(minigame.state.speed)
 
@@ -43,7 +43,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 		end
 	end)
 
-	return create("Frame", {
+	return create("Frame")({
 		Name = "FishingBar",
 		BackgroundColor3 = Color3.fromHex("#000000"),
 		BackgroundTransparency = useTransparency(0.3, transparency),
@@ -55,7 +55,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 			return px.offset(math.lerp(340, 440, transition()), 20)()
 		end,
 
-		create("Frame", {
+		create("Frame")({
 			Name = "ControlBar",
 			BackgroundColor3 = Color3.fromHex("#FFFFFF"),
 			BackgroundTransparency = transparency,
@@ -65,7 +65,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 			end,
 			Size = UDim2.fromScale(minigame.state.range * 2, 1),
 
-			create("TextLabel", {
+			create("TextLabel")({
 				Name = "ArrowLeft",
 				FontFace = fonts.inter.heavy,
 				Text = "←",
@@ -80,7 +80,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 				end,
 			}),
 
-			create("TextLabel", {
+			create("TextLabel")({
 				Name = "ArrowRight",
 				FontFace = fonts.inter.heavy,
 				Text = "→",
@@ -94,12 +94,12 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 				Visible = inputStore.holdRod,
 			}),
 
-			create("UICorner", {
+			create("UICorner")({
 				CornerRadius = UDim.new(1, 0),
 			}),
 		}),
 
-		create("Frame", {
+		create("Frame")({
 			Name = "ProgressBar",
 			BackgroundColor3 = Color3.fromHex("#000000"),
 			BackgroundTransparency = useTransparency(0.3, transparency),
@@ -107,7 +107,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 			Position = px.udim2(0.5, 0, 1, 26),
 			Size = px.offset(250, 8),
 
-			create("Frame", {
+			create("Frame")({
 				Name = "ProgressFill",
 				BackgroundColor3 = Color3.fromHex("#FFFFFF"),
 				BackgroundTransparency = useTransparency(0.5, transparency),
@@ -115,12 +115,12 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 					return UDim2.fromScale(math.max(0.025, minigame.getProgress()), 1)
 				end,
 
-				create("UICorner", {
+				create("UICorner")({
 					CornerRadius = UDim.new(1, 0),
 				}),
 			}),
 
-			math.abs(progressSpeed) > 0.01 and create("TextLabel", {
+			math.abs(progressSpeed) > 0.01 and create("TextLabel")({
 				Name = "ProgressSpeed",
 				FontFace = fonts.inter.semibold,
 				Text = `{numbers.signedPercentage(progressSpeed)} Progress Speed`,
@@ -131,23 +131,23 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 				BackgroundTransparency = 1,
 				Position = px.udim2(0.5, 0, 1, 10),
 
-				create("UIStroke", {
+				create("UIStroke")({
 					Thickness = px.scale(2),
 					Transparency = useTransparency(0.7, transparency),
 				}),
 			}) or nil,
 
-			create("UICorner", {
+			create("UICorner")({
 				CornerRadius = UDim.new(1, 0),
 			}),
 
-			create("UIStroke", {
+			create("UIStroke")({
 				Thickness = px.scale(3),
 				Transparency = useTransparency(0.3, transparency),
 			}),
 		}),
 
-		create("Frame", {
+		create("Frame")({
 			Name = "Fish",
 			BackgroundColor3 = Color3.fromHex("#6EB5F1"),
 			BackgroundTransparency = transparency,
@@ -157,7 +157,7 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 			end,
 			Size = px.offset(14, 50),
 
-			create("TextLabel", {
+			create("TextLabel")({
 				Name = "FishEmoji",
 				Text = "🐟",
 				TextSize = px(40),
@@ -167,11 +167,11 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 				Position = UDim2.fromScale(0.5, 0),
 			}),
 
-			create("UICorner", {
+			create("UICorner")({
 				CornerRadius = UDim.new(1, 0),
 			}),
 
-			create("UIStroke", {
+			create("UIStroke")({
 				BorderStrokePosition = Enum.BorderStrokePosition.Inner,
 				Color = Color3.fromHex("#FFFFFF"),
 				Thickness = px(2),
@@ -179,11 +179,11 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 			}),
 		}),
 
-		create("UICorner", {
+		create("UICorner")({
 			CornerRadius = UDim.new(1, 0),
 		}),
 
-		create("UIStroke", {
+		create("UIStroke")({
 			Thickness = px.scale(5),
 			Transparency = useTransparency(0.3, transparency),
 		}),
@@ -191,17 +191,19 @@ local function FishingBarView(visible: () -> boolean, seed: number, rod: rods.Ro
 end
 
 local function FishingBar()
-	local getCatchingState = useSignalState(appStore.getReelingState)
+	local isReeling = useSignalState(appStore.isReeling)
 
-	local function isCatching()
-		return getCatchingState() ~= nil
-	end
+	return show(isReeling, function(): (Instance?, number)
+		local fisher = appStore.getFisher()
 
-	return show(getCatchingState, function(getCatchingState)
-		local state = getCatchingState()
-		local rod = rods.byId[state.rodId]
-		local fish = fishes.byId[state.fishId]
-		return FishingBarView(isCatching, state.seed, rod, fish), 0.5
+		if not fisher or not fisher.fish then
+			return nil, 0
+		end
+
+		local rod = rods.getRod(fisher.rodId)
+		local fish = fishes.getFish(fisher.fish.fishId)
+
+		return FishingBarView(isReeling, fisher.seed, rod, fish), 0.5
 	end)
 end
 

@@ -1,13 +1,22 @@
-[submodule "submodules/vendor/charm"]
-	path = submodules/vendor/charm
+[submodule "modules/submodules/vide"]
+	path = modules/submodules/vide
+	url = https://github.com/centau/vide
+[submodule "modules/submodules/lyra"]
+	path = modules/submodules/lyra
+	url = https://github.com/paradoxum-games/lyra
+[submodule "modules/submodules/promise"]
+	path = modules/submodules/promise
+	url = https://github.com/evaera/roblox-lua-promise
+[submodule "modules/submodules/charm"]
+	path = modules/submodules/charm
 	url = https://github.com/littensy/charm
 	branch = alien-signals
-[submodule "submodules/vendor/vide"]
-	path = submodules/vendor/vide
-	url = https://github.com/centau/vide
-[submodule "submodules/vendor/greentea"]
-	path = submodules/vendor/greentea
-	url = https://github.com/corecii/greentea
-[submodule "test/suite"]
-	path = test/suite
+[submodule "tests/test"]
+	path = tests/test
 	url = https://gist.github.com/littensy/fa9afcc5d66d25e86538634982be4ee4
+[submodule "modules/submodules/t"]
+	path = modules/submodules/t
+	url = https://github.com/osyrisrblx/t
+[submodule "modules/submodules/greentea"]
+	path = modules/submodules/greentea
+	url = https://github.com/Corecii/GreenTea

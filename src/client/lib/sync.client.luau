@@ -1,9 +1,13 @@
-local CharmSync = require("../../../submodules/CharmSync")
+local Players = game:GetService("Players")
+
+local CharmSync = require("../../../modules/CharmSync")
+local appStore = require("../stores/appStore")
 local fishingStore = require("../../shared/stores/fishingStore")
 local remotes = require("../../shared/remotes")
 
 CharmSync.client.addSignals({
 	fishing = fishingStore.state,
+	[Players.LocalPlayer.Name] = appStore.account,
 })
 
 remotes.patch.OnClientEvent:Connect(function(patches)

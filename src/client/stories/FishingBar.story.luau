@@ -2,10 +2,10 @@ local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 
 local FishingBar = require("../components/FishingBar")
-local Vide = require("../../../submodules/Vide")
-local fishes = require("../../shared/constants/fishes")
+local Vide = require("../../../modules/Vide")
 local fishingStore = require("../../shared/stores/fishingStore")
 local inputStore = require("../stores/inputStore")
+local pools = require("../../shared/constants/pools")
 local px = require("../utils/px")
 local useInterval = require("../hooks/useInterval")
 
@@ -16,7 +16,11 @@ return function(target: Instance)
 
 		fishingStore.castRod(username, rodId, 1, tick())
 		fishingStore.setLuringPool(username, "pond")
-		fishingStore.setReelingFish(username, fishes.getRandomFishId())
+		fishingStore.setReelingFish(username, {
+			fishId = pools.getRandomFishFromPool("pond"),
+			weightMultiplier = 1,
+			mutations = {},
+		})
 
 		useInterval(function()
 			inputStore.holdRod(UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1))

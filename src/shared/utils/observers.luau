@@ -113,9 +113,37 @@ local function observeCharacter(player: Player, callback: (Model) -> Cleanup?): 
 	end)
 end
 
+local function observeChildWhichIsA<T>(parent: Instance, className: string, callback: (T) -> Cleanup?): Cleanup
+	return createObserver(function(observer)
+		local childAdded = parent.ChildAdded:Connect(function(child)
+			if child:IsA(className) then
+				observer.add(child, callback(child))
+			end
+		end)
+
+		local childRemoving = parent.ChildRemoved:Connect(function(child)
+			if child:IsA(className) then
+				observer.remove(child)
+			end
+		end)
+
+		for _, child in parent:GetChildren() do
+			if child:IsA(className) then
+				observer.add(child, callback(child))
+			end
+		end
+
+		return function()
+			childAdded:Disconnect()
+			childRemoving:Disconnect()
+		end
+	end)
+end
+
 return {
 	createObserver = createObserver,
 	observeTag = observeTag,
 	observeCharacter = observeCharacter,
 	observePlayers = observePlayers,
+	observeChildWhichIsA = observeChildWhichIsA,
 }

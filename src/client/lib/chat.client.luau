@@ -1,10 +1,9 @@
 local TextChatService = game:GetService("TextChatService")
 
-local fishes = require("../../shared/constants/fishes")
+local fishes = require("../../shared/fishes")
 local remotes = require("../../shared/remotes")
 
-local CATCH_SUCCESS = "<font color='#63d6b2'>%s caught a %s!</font>"
-local CATCH_FAILURE = "<font color='#ed4e6b'>%s failed to catch a %s</font>"
+type Fish = fishes.Fish
 
 local function getChannel(name: string): TextChannel?
 	local textChannels = TextChatService:FindFirstChild("TextChannels")
@@ -18,8 +17,12 @@ local function displaySystemMessage(message: string)
 	end
 end
 
-remotes.caughtFish.OnClientEvent:Connect(function(player: Player, fishId: string, success: boolean)
-	local format = if success then CATCH_SUCCESS else CATCH_FAILURE
-	local fish = fishes.byId[fishId]
-	displaySystemMessage(string.format(format, player.DisplayName, fish.name))
+remotes.caughtFish.OnClientEvent:Connect(function(player: Player, fish: Fish, success: boolean)
+	local text = fishes.stringifyFish(fish)
+	local weight = string.format("%.2f lbs", fishes.getFishWeight(fish))
+	local message = if success
+		then `<font color='#63d6b2'>{player.DisplayName} caught a {weight} {text}!</font>`
+		else `<font color='#ed4e6b'>{player.DisplayName} failed to catch a {weight} {text}!</font>`
+
+	displaySystemMessage(message)
 end)

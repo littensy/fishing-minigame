@@ -1,6 +1,6 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local constants = require("../../shared/constants")
-local fishes = require("../../shared/constants/fishes")
+local fishes = require("../../shared/fishes")
 local inputStore = require("../stores/inputStore")
 local minigame = require("../../shared/minigame")
 local replay = require("../../shared/replay")
@@ -36,7 +36,7 @@ local function createKeyframe(state: minigame.MinigameState)
 	}
 end
 
-local function useMinigame(seed: number, rod: rods.Rod, fish: fishes.Fish): MinigameController
+local function useMinigame(seed: number, rod: rods.RodInfo, fish: fishes.FishInfo): MinigameController
 	local status = source("idle") :: Source<MinigameStatus>
 	local state = minigame.create({ seed = seed, rod = rod, fish = fish })
 	local recorder = replay.createRecorder(state)

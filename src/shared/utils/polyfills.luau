@@ -1,21 +1,25 @@
 local Random = Random
 
 if not Random then
-	local function createRandom()
-		local self = {}
+	local RandomPolyfill = {}
+	RandomPolyfill.__index = RandomPolyfill
 
-		function self:NextNumber(min: number?, max: number?): number
-			return math.lerp(min or 0, max or 1, math.random())
+	function RandomPolyfill.new(seed: number?): any
+		if seed then
+			math.randomseed(seed)
 		end
-
-		function self:NextInteger(min: number, max: number): number
-			return math.random(min, max)
-		end
-
-		return self
+		return setmetatable({}, RandomPolyfill)
 	end
 
-	Random = { new = createRandom } :: any
+	function RandomPolyfill:NextNumber(min: number?, max: number?): number
+		return math.lerp(min or 0, max or 1, math.random())
+	end
+
+	function RandomPolyfill:NextInteger(min: number, max: number): number
+		return math.random(min, max)
+	end
+
+	Random = RandomPolyfill :: never
 end
 
 return {

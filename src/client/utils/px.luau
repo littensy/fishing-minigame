@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 local cleanup = Vide.cleanup
 local derive = Vide.derive

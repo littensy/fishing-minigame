@@ -1,17 +1,18 @@
 local constants = require("./constants")
 
 local TICK_RATE = constants.TICK_RATE
+local PROGRESS_PER_SECOND = 0.15
 
 local function getMovementInterval(resilience: number): number
-	return math.clamp(1 * (1 + resilience), 0.3, 2)
+	return math.clamp(1 * (1 + resilience), 0.3, 2.5)
 end
 
 local function getMovementFrameInterval(resilience: number): number
-	return math.ceil(getMovementInterval(resilience) / TICK_RATE)
+	return getMovementInterval(resilience) // TICK_RATE
 end
 
 local function getMovementDamping(resilience: number): number
-	return math.map(getMovementInterval(resilience), 0.3, 2, 10, 0.5)
+	return math.map(getMovementInterval(resilience), 0.3, 2, 8, 0.5)
 end
 
 local function getLureTime(percentage: number): number
@@ -23,11 +24,11 @@ local function getBarRange(percentage: number): number
 end
 
 local function getProgressSpeed(percentage: number): number
-	return 0.15 * (1 + percentage)
+	return PROGRESS_PER_SECOND * (1 + percentage)
 end
 
 local function getProgressSpeedPercentage(progressSpeed: number): number
-	return (progressSpeed / 0.15) - 1
+	return (progressSpeed / PROGRESS_PER_SECOND) - 1
 end
 
 return {

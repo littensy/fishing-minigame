@@ -1,15 +1,17 @@
 local Players = game:GetService("Players")
 
-local Charm = require("../../../submodules/Charm")
+local Charm = require("../../../modules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
 local pools = require("../../shared/constants/pools")
 
-type BobberInstance = Model & {
-	Part: Part & {
+type Fisher = fishingStore.Fisher
+
+type BobberInstance = {
+	Part: {
 		Attachment: Attachment,
-	},
+	} & Part,
 	AlignOrientation: AlignOrientation,
-}
+} & Model
 
 local bobberContainer = Instance.new("Folder")
 bobberContainer.Name = "Bobbers"
@@ -49,12 +51,12 @@ local function createBobber(character: Model): BobberInstance
 	return bobber :: BobberInstance
 end
 
-Charm.observe(fishingStore.getFishers, function(props, username)
+Charm.observe(fishingStore.getFishers, function(fisherProxy: Fisher, username: string): (() -> ())?
 	local player = Players:FindFirstChild(username) :: Player?
 	local character = player and player.Character
 
 	if not character then
-		return
+		return nil
 	end
 
 	local bobber = createBobber(character)
@@ -64,14 +66,11 @@ Charm.observe(fishingStore.getFishers, function(props, username)
 	end)
 
 	local touched = bobber.Part.Touched:Connect(function(touching)
-		if not touching:HasTag("Water") or isSubmerged() then
-			return
-		end
-
-		local poolId = pools.getPoolIdFromInstance(touching)
-
-		if poolId then
-			fishingStore.setLuringPool(username, poolId)
+		if touching:HasTag("Water") then
+			local poolId = pools.getPoolIdFromInstance(touching)
+			if poolId then
+				fishingStore.setLuringPool(username, poolId)
+			end
 		end
 	end)
 
@@ -82,7 +81,7 @@ Charm.observe(fishingStore.getFishers, function(props, username)
 		end
 	end)
 
-	shootBobberFromCharacter(bobber, character, props.castPower)
+	shootBobberFromCharacter(bobber, character, fisherProxy.castPower)
 
 	return function()
 		bobber:Destroy()

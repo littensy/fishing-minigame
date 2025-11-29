@@ -5,7 +5,7 @@
 
 local RunService = game:GetService("RunService")
 
-local gt = require("../../../submodules/gt")
+local gt = require("../../../modules/gt")
 
 export type Event<Args...> = {
 	FireServer: (self: Event<Args...>, Args...) -> (),
@@ -20,17 +20,21 @@ export type Callback<Args..., Results...> = {
 	OnServerInvoke: (player: Player, Args...) -> Results...,
 }
 
+type EventConstructor = <Args...>(Args...) -> Event<Args...>
+
+type CallbackConstructor = <Args...>(Args...) -> {
+	returns: <Results...>() -> Callback<Args..., Results...>,
+}
+
 local IS_CLIENT = RunService:IsClient()
 local IS_SERVER = RunService:IsServer()
 local IS_TEST = RunService:IsStudio() and not RunService:IsRunning()
 
 local counter = 0
-local schemas: { [unknown]: gt.Type } = {}
+local schemas: { [any]: gt.Type } = {}
 
-local event: <Args...>(Args...) -> Event<Args...>
-local callback: <Args...>(Args...) -> {
-	returns: <Results...>(Results...) -> Callback<Args..., Results...>,
-}
+local event: EventConstructor
+local callback: CallbackConstructor
 
 local function nextId(): string
 	counter += 1
@@ -95,6 +99,6 @@ end
 
 return {
 	assert = assert,
-	event = event,
-	callback = callback,
+	event = event :: EventConstructor,
+	callback = callback :: CallbackConstructor,
 }

@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 local castRod = Vide.source(false)
 local shakeRod = Vide.source(false)
