@@ -11,6 +11,9 @@ jobs:
           submodules: true
       - uses: CompeyDev/setup-rokit@v0.1.2
 
+      - name: Setup Lute
+        run: lute setup --with-luaurc
+
       - name: Check code quality
         run: lute run check
 
