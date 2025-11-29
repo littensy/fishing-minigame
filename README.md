@@ -1,6 +1,6 @@
 # fishing-minigame
 
-https://github.com/user-attachments/assets/62975187-4a85-49f1-a937-90b8dbb3a34b
+https://github.com/user-attachments/assets/5431be51-7f33-4a60-81d3-1b33003134b0
 
 A recreation of [Fisch](https://www.roblox.com/games/16732694052) using [reactive signals](https://github.com/littensy/charm/tree/alien-signals) for game state.
 
