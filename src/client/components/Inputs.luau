@@ -1,5 +1,5 @@
-local Vide = require("../../../submodules/Vide")
-local VideCharm = require("../../../submodules/VideCharm")
+local Vide = require("../../../modules/Vide")
+local VideCharm = require("../../../modules/VideCharm")
 local appStore = require("../stores/appStore")
 local inputStore = require("../stores/inputStore")
 local objects = require("../../shared/utils/objects")
@@ -21,14 +21,14 @@ type BoolInputActionProps = {
 }
 
 local function BoolInputAction(props: BoolInputActionProps)
-	return create("InputAction", {
+	return create("InputAction")({
 		StateChanged = props.action,
 		Name = props.name,
 		Type = Enum.InputActionType.Bool,
 		Enabled = props.enabled,
 
 		objects.map(props.inputs, function(input: InputProps)
-			return create("InputBinding", {
+			return create("InputBinding")({
 				Name = if input.key then input.key.Name else "UIButton",
 				KeyCode = input.key,
 				UIButton = input.button,
@@ -43,7 +43,7 @@ local function Inputs()
 	local isLuring = useSignalState(appStore.isLuring)
 	local isCatching = useSignalState(appStore.isReeling)
 
-	return create("InputContext", {
+	return create("InputContext")({
 		Name = "GameplayContext",
 
 		BoolInputAction({

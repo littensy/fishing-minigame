@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local useEventListener = require("./useEventListener")
 
 local function useCharacter(): () -> Model?

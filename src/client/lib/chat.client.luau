@@ -1,7 +1,9 @@
 local TextChatService = game:GetService("TextChatService")
 
-local fishes = require("../../shared/constants/fishes")
+local fishes = require("../../shared/fishes")
 local remotes = require("../../shared/remotes")
+
+type Fish = fishes.Fish
 
 local function getChannel(name: string): TextChannel?
 	local textChannels = TextChatService:FindFirstChild("TextChannels")
@@ -15,11 +17,12 @@ local function displaySystemMessage(message: string)
 	end
 end
 
-remotes.caughtFish.OnClientEvent:Connect(function(player: Player, fishId: string, success: boolean)
-	local fish = fishes.byId[fishId]
+remotes.caughtFish.OnClientEvent:Connect(function(player: Player, fish: Fish, success: boolean)
+	local text = fishes.stringifyFish(fish)
+	local weight = string.format("%.2f lbs", fishes.getFishWeight(fish))
 	local message = if success
-		then `<font color='#63d6b2'>{player.Name} caught a {fish.name}!</font>`
-		else `<font color='#ed4e6b'>{player.Name} failed to catch a {fish.name}!</font>`
+		then `<font color='#63d6b2'>{player.DisplayName} caught a {weight} {text}!</font>`
+		else `<font color='#ed4e6b'>{player.DisplayName} failed to catch a {weight} {text}!</font>`
 
 	displaySystemMessage(message)
 end)

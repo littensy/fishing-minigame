@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 type function GetSignalListener(signal: type)
 	local connect = signal:readproperty(types.singleton("Connect"))

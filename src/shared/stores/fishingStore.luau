@@ -1,12 +1,15 @@
-local Charm = require("../../../submodules/Charm")
+local Charm = require("../../../modules/Charm")
+local fishes = require("../fishes")
 local objects = require("../utils/objects")
+
+type Fish = fishes.Fish
 
 export type Fisher = {
 	seed: number,
 	rodId: string,
 	castPower: number,
 	poolId: string?,
-	fishId: string?,
+	fish: Fish?,
 }
 
 export type FisherLuring = Fisher & {
@@ -15,7 +18,7 @@ export type FisherLuring = Fisher & {
 
 export type FisherReeling = Fisher & {
 	poolId: string,
-	fishId: string,
+	fish: Fish,
 }
 
 local state = Charm.reactive({
@@ -28,13 +31,13 @@ end
 
 local getFishersLuring = Charm.computed(function()
 	return objects.map(state.fishing, function(fisher: Fisher): FisherLuring?
-		return if fisher.poolId ~= nil and fisher.fishId == nil then fisher else nil
+		return if fisher.poolId ~= nil and fisher.fish == nil then fisher else nil
 	end)
 end)
 
 local getFishersReeling = Charm.computed(function()
 	return objects.map(state.fishing, function(fisher: Fisher): FisherReeling?
-		return if fisher.poolId ~= nil and fisher.fishId ~= nil then fisher else nil
+		return if fisher.poolId ~= nil and fisher.fish ~= nil then fisher else nil
 	end)
 end)
 
@@ -48,12 +51,12 @@ end
 
 local function isLuring(username: string): boolean
 	local fisher = state.fishing[username]
-	return fisher ~= nil and fisher.poolId ~= nil and fisher.fishId == nil
+	return fisher ~= nil and fisher.poolId ~= nil and fisher.fish == nil
 end
 
 local function isReeling(username: string): boolean
 	local fisher = state.fishing[username]
-	return fisher ~= nil and fisher.poolId ~= nil and fisher.fishId ~= nil
+	return fisher ~= nil and fisher.poolId ~= nil and fisher.fish ~= nil
 end
 
 local function castRod(username: string, rodId: string, power: number, seed: number)
@@ -71,10 +74,10 @@ local function setLuringPool(username: string, poolId: string)
 	end
 end
 
-local function setReelingFish(username: string, fishId: string)
+local function setReelingFish(username: string, fish: Fish)
 	local fisher = state.fishing[username]
 	if fisher then
-		fisher.fishId = fishId
+		fisher.fish = fish
 	end
 end
 

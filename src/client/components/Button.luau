@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local fonts = require("../utils/fonts")
 local px = require("../utils/px")
 
@@ -26,7 +26,7 @@ local function Button(props: Props)
 		end
 	end)
 
-	return create("TextButton", {
+	return create("TextButton")({
 		FontFace = fonts.inter.bold,
 		Text = props.text,
 		TextSize = px(20),
@@ -43,11 +43,11 @@ local function Button(props: Props)
 			props.ref(instance)
 		end),
 
-		create("UICorner", {
+		create("UICorner")({
 			CornerRadius = UDim.new(1, 0),
 		}),
 
-		create("UIStroke", {
+		create("UIStroke")({
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 			BorderOffset = px.udim(0, -8),
 			Thickness = px.scale(2),

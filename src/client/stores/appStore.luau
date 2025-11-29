@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 
-local Charm = require("../../../submodules/Charm")
+local Charm = require("../../../modules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
 local types = require("../../shared/types")
 

@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local useEventListener = require("./useEventListener")
 
 local function usePolled<T>(callback: (elapsed: number, delta: number) -> T): () -> T

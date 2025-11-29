@@ -1,5 +1,5 @@
 local constants = require("./constants")
-local fishes = require("./constants/fishes")
+local fishes = require("./fishes")
 local numbers = require("./utils/numbers")
 local polyfills = require("./utils/polyfills")
 local rods = require("./constants/rods")

@@ -1,5 +1,5 @@
-local Vide = require("../../../submodules/Vide")
-local VideCharm = require("../../../submodules/VideCharm")
+local Vide = require("../../../modules/Vide")
+local VideCharm = require("../../../modules/VideCharm")
 local appStore = require("../stores/appStore")
 local inputStore = require("../stores/inputStore")
 local px = require("../utils/px")
@@ -47,22 +47,22 @@ local function CastMeterView(visible: () -> boolean)
 		end
 	end)
 
-	return create("BillboardGui", {
+	return create("BillboardGui")({
 		Name = "CastMeter",
-		Adornee = useCharacter(),
+		Adornee = useCharacter() :: () -> Instance,
 		AlwaysOnTop = true,
 		Size = px.offset(12, 200),
 		StudsOffset = function()
 			return Vector3.new(math.lerp(2, 3, transition()), 0, 0)
 		end,
 
-		create("Frame", {
+		create("Frame")({
 			Name = "MeterBackground",
 			BackgroundColor3 = Color3.fromHex("#000000"),
 			BackgroundTransparency = useTransparency(0.3, transparency),
 			Size = UDim2.fromScale(1, 1),
 
-			create("Frame", {
+			create("Frame")({
 				Name = "MeterFill",
 				BackgroundColor3 = Color3.fromHex("#FFFFFF"),
 				BackgroundTransparency = transparency,
@@ -72,16 +72,16 @@ local function CastMeterView(visible: () -> boolean)
 					return UDim2.fromScale(1, math.lerp(0.075, 1, getPower()))
 				end,
 
-				create("UICorner", {
+				create("UICorner")({
 					CornerRadius = UDim.new(1, 0),
 				}),
 			}),
 
-			create("UICorner", {
+			create("UICorner")({
 				CornerRadius = UDim.new(1, 0),
 			}),
 
-			create("UIStroke", {
+			create("UIStroke")({
 				Thickness = px.scale(3),
 				Transparency = useTransparency(0.3, transparency),
 			}),

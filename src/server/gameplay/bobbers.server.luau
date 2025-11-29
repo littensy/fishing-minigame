@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 
-local Charm = require("../../../submodules/Charm")
+local Charm = require("../../../modules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
 local pools = require("../../shared/constants/pools")
 
@@ -51,7 +51,7 @@ local function createBobber(character: Model): BobberInstance
 	return bobber :: BobberInstance
 end
 
-Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string): (() -> ())?
+Charm.observe(fishingStore.getFishers, function(fisherProxy: Fisher, username: string): (() -> ())?
 	local player = Players:FindFirstChild(username) :: Player?
 	local character = player and player.Character
 
@@ -81,7 +81,7 @@ Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string
 		end
 	end)
 
-	shootBobberFromCharacter(bobber, character, fisher.castPower)
+	shootBobberFromCharacter(bobber, character, fisherProxy.castPower)
 
 	return function()
 		bobber:Destroy()

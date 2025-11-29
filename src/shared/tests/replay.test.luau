@@ -1,10 +1,10 @@
-local fishes = require("../constants/fishes")
+local fishes = require("../fishes")
 local minigame = require("../minigame")
 local replay = require("../replay")
 local rods = require("../constants/rods")
-local suite = require("../../../test/suite")
+local test = require("../../../tests/test")
 
-suite.test("should encode and decode replay", function()
+test("should encode and decode replay", function()
 	local frames = 120
 	local inputs = table.create(frames // 10, 10)
 
@@ -19,8 +19,12 @@ suite.test("should encode and decode replay", function()
 	end
 end)
 
-suite.test("should record inputs", function()
-	local state = minigame.create({ seed = 0, rod = rods.byId.basic, fish = fishes.byId.salmon })
+test("should record inputs", function()
+	local state = minigame.create({
+		seed = 0,
+		rod = rods.getRod("basic"),
+		fish = fishes.getFish("salmon"),
+	})
 	local recorder = replay.createRecorder(state)
 	local totalFrames = 100
 

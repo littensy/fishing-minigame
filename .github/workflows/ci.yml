@@ -12,7 +12,7 @@ jobs:
       - uses: CompeyDev/setup-rokit@v0.1.2
 
       - name: Check code quality
-        run: sh bin/check.sh
+        run: lute run check
 
       - name: Run tests
-        run: sh bin/test.sh
+        run: lute run tests

@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 
 local App = require("../components/App")
 local Inputs = require("../components/Inputs")
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 local mount = Vide.mount
 

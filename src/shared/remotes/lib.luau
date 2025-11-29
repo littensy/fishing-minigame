@@ -5,7 +5,7 @@
 
 local RunService = game:GetService("RunService")
 
-local gt = require("../../../submodules/gt")
+local gt = require("../../../modules/gt")
 
 export type Event<Args...> = {
 	FireServer: (self: Event<Args...>, Args...) -> (),

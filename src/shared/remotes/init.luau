@@ -1,4 +1,5 @@
-local gt = require("../../submodules/gt")
+local fishes = require("./fishes")
+local gt = require("../../modules/gt")
 local lib = require("@self/lib")
 
 return {
@@ -7,5 +8,5 @@ return {
 	shakeRod = lib.event(),
 	castRod = lib.event(gt.number({ range = { min = 0, max = 100 } })),
 	catchFish = lib.event(gt.buffer()),
-	caughtFish = lib.event(gt.isA.Player(), gt.string(), gt.boolean()),
+	caughtFish = lib.event(gt.isA.Player(), gt.any() :: fishes.Fish, gt.boolean()),
 }

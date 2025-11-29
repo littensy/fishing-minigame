@@ -1,19 +1,11 @@
-local gt = require("../../submodules/gt")
+local fishes = require("./fishes")
 
-local fishItemSchema = gt.table({
-	id = gt.string(),
-	weightMultiplier = gt.number(),
-	mutation = gt.optional(gt.string()),
-})
+type Fish = fishes.Fish
 
-export type FishItem = typeof(fishItemSchema)
-
-local accountSchema = gt.table({
-	gold = gt.number(),
-	fishes = gt.array(fishItemSchema),
-})
-
-export type Account = typeof(accountSchema)
+export type Account = {
+	gold: number,
+	fishes: { [string]: Fish },
+}
 
 local accountTemplate: Account = {
 	gold = 0,
@@ -21,7 +13,5 @@ local accountTemplate: Account = {
 }
 
 return {
-	fishItemSchema = fishItemSchema,
-	accountSchema = accountSchema,
 	accountTemplate = accountTemplate,
 }

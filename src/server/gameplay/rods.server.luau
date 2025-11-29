@@ -1,4 +1,4 @@
-local Charm = require("../../../submodules/Charm")
+local Charm = require("../../../modules/Charm")
 local fishingStore = require("../../shared/stores/fishingStore")
 local observers = require("../../shared/utils/observers")
 local remotes = require("../../shared/remotes")

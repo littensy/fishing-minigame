@@ -3,7 +3,7 @@ local CastMeter = require("./CastMeter")
 local FishingBar = require("./FishingBar")
 local HoldButton = require("./HoldButton")
 local ShakeButton = require("./ShakeButton")
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local px = require("../utils/px")
 
 local create = Vide.create
@@ -11,7 +11,7 @@ local create = Vide.create
 local function App()
 	px.usePx()
 
-	return create("ScreenGui", {
+	return create("ScreenGui")({
 		Name = "Gameplay",
 
 		CastMeter(),

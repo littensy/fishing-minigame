@@ -3,25 +3,30 @@ export type PoolInfo = {
 	fishes: { string },
 }
 
-local pools: { [string]: PoolInfo } = {
+local poolsById: { [string]: PoolInfo } = {
 	pond = {
 		name = "Tranquil Pond",
 		fishes = { "salmon", "tuna", "trout", "bullShark" },
 	},
 }
 
+local function getPool(poolId: string): PoolInfo
+	return assert(poolsById[poolId], `Failed to get pool {poolId}`)
+end
+
 local function getPoolIdFromInstance(instance: Instance): string?
 	local poolId = instance:GetAttribute("PoolId")
-	return if type(poolId) == "string" and pools[poolId] then poolId else nil
+	return if type(poolId) == "string" and poolsById[poolId] then poolId else nil
 end
 
 local function getRandomFishFromPool(poolId: string): string
-	local fishes = pools[poolId].fishes
+	local fishes = poolsById[poolId].fishes
 	return fishes[math.random(#fishes)]
 end
 
 return {
-	byId = pools,
+	poolsById = poolsById,
+	getPool = getPool,
 	getPoolIdFromInstance = getPoolIdFromInstance,
 	getRandomFishFromPool = getRandomFishFromPool,
 }

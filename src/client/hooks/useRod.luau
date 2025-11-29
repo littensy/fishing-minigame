@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 local rods = require("../../shared/constants/rods")
 local useCharacter = require("./useCharacter")
 local useEventListener = require("./useEventListener")
@@ -16,7 +16,7 @@ local function useRod(): () -> rods.RodInfo?
 
 		local function updateCurrentRod()
 			local rodId = rods.getRodIdFromCharacter(character)
-			currentRod(rodId and rods.byId[rodId])
+			currentRod(rodId and rods.getRod(rodId))
 		end
 
 		useEventListener(character.ChildAdded, function(child: Instance)

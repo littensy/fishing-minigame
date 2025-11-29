@@ -1,4 +1,4 @@
-local Vide = require("../../../submodules/Vide")
+local Vide = require("../../../modules/Vide")
 
 local function useTransparency(...: number | () -> number): () -> number
 	local values = { ... }
