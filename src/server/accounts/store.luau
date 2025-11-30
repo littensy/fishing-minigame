@@ -8,28 +8,15 @@ local types = require("../../shared/types")
 
 type Account = types.Account
 
--- FIXME: Remove type cast when Luau issue #1986 is resolved
-type PlayerStoreConfig<T> = {
-	name: string,
-	template: T,
-	useDSSLocking: boolean?,
-	schema: (value: any) -> (boolean, string?),
-	migrationSteps: any,
-	importLegacyData: ((key: string) -> any?)?,
-	changedCallbacks: any,
-	logCallback: any,
-	memoryStoreService: MemoryStoreService?,
-	dataStoreService: DataStoreService?,
-}
-
 local function accountChanged(key: string, account: Account)
 	local player = Players:GetPlayerByUserId(tonumber(key) :: number)
 	if player then
-		accountStore.reconcileAccount(player.Name, account)
+		accountStore.setAccount(player.Name, account)
 	end
 end
 
-local config = {
+-- FIXME: Remove explicit type when luau-lang/luau#1986 is resolved
+local config: Lyra.PlayerStoreConfig<Account> = {
 	name = "PlayerData",
 	template = types.accountTemplate,
 	schema = function(data)
@@ -37,7 +24,7 @@ local config = {
 		return ok, tostring(reason)
 	end,
 	changedCallbacks = { accountChanged },
-} :: PlayerStoreConfig<Account>
+}
 
 if RunService:IsStudio() then
 	config.dataStoreService = Lyra.MockDataStoreService.new()

@@ -6,7 +6,7 @@ local types = require("../../shared/types")
 
 export type FisherReeling = fishingStore.FisherReeling
 
-local account = Charm.reactive(types.accountTemplate)
+local getAccount, setAccount = Charm.signal(types.accountTemplate)
 
 local isFishing = Charm.computed(function()
 	return fishingStore.isFishing(Players.LocalPlayer.Name)
@@ -25,7 +25,8 @@ local function getFisher()
 end
 
 return {
-	account = account,
+	getAccount = getAccount,
+	setAccount = setAccount,
 	isFishing = isFishing,
 	isLuring = isLuring,
 	isReeling = isReeling,

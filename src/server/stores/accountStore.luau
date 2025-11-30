@@ -4,42 +4,31 @@ local types = require("../../shared/types")
 
 export type Account = types.Account
 
-local state, setState = Charm.reactive({
-	accounts = {} :: { [string]: Account },
-})
+type Accounts = {
+	[string]: Account,
+}
 
-local function getAccounts()
-	return state.accounts
-end
+local getAccounts, setAccounts = Charm.signal({} :: Accounts)
 
 local function getAccount(username: string): Account?
-	return state.accounts[username]
+	return getAccounts()[username]
 end
 
-local function addAccount(username: string, account: Account)
-	state.accounts[username] = account
-end
-
-local function reconcileAccount(username: string, source: Account)
-	setState(function(state)
-		local target = state.accounts[username]
-		if target then
-			objects.reconcile(target, source)
-		else
-			state.accounts[username] = table.clone(source)
-		end
+local function setAccount(username: string, account: Account)
+	setAccounts(function(state: Accounts)
+		return objects.set(state, username, account)
 	end)
 end
 
 local function removeAccount(username: string)
-	state.accounts[username] = nil
+	setAccounts(function(state: Accounts)
+		return objects.delete(state, username)
+	end)
 end
 
 return {
-	state = state,
 	getAccounts = getAccounts,
 	getAccount = getAccount,
-	addAccount = addAccount,
-	reconcileAccount = reconcileAccount,
+	setAccount = setAccount,
 	removeAccount = removeAccount,
 }

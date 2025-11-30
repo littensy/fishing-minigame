@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 
+local Charm = require("../../../modules/Charm")
 local CharmSync = require("../../../modules/CharmSync")
 local accountStore = require(".././stores/accountStore")
 local fishingStore = require("../../shared/stores/fishingStore")
@@ -7,10 +8,10 @@ local remotes = require("../../shared/remotes")
 
 local function onPlayerAdded(player: Player)
 	CharmSync.server.addSignalsToClient(player, {
-		fishing = fishingStore.state,
-		[player.Name] = function()
+		fishing = fishingStore.getFishers,
+		[player.Name] = Charm.computed(function()
 			return accountStore.getAccount(player.Name)
-		end,
+		end),
 	})
 end
 

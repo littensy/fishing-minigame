@@ -1,16 +1,16 @@
 export type FishInfo = {
-	name: string,
-	description: string,
-	weight: number,
-	valuePerPound: number,
-	resilience: number,
-	progressSpeed: number,
+	read name: string,
+	read description: string,
+	read weight: number,
+	read valuePerPound: number,
+	read resilience: number,
+	read progressSpeed: number,
 }
 
 export type Fish = {
-	fishId: string,
-	weightMultiplier: number,
-	mutations: { [string]: boolean },
+	read fishId: string,
+	read weightMultiplier: number,
+	read mutations: { [string]: boolean },
 }
 
 return {}

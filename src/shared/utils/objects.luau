@@ -37,33 +37,39 @@ local function keys<K>(object: { [K]: any }): { K }
 	return result
 end
 
-local function reconcile<T>(target: T & {}, source: T & {})
-	for key in target :: any do
-		if source[key] == nil then
-			target[key] = nil
-		end
+local function set<T, K>(object: T & {}, key: K & keyof<T>, value: index<T, K>): T
+	if object[key] ~= value then
+		object = table.clone(object)
+		object[key] = value
 	end
-
-	for key, sourceValue in source :: any do
-		target[key] = sourceValue
-	end
+	return object
 end
 
-local function deepCopy<T>(source: T): T
-	if type(source) ~= "table" then
-		return source
+local function delete<T>(object: T & {}, key: keyof<T>): T
+	if object[key] ~= nil then
+		object = table.clone(object)
+		object[key] = nil
 	end
-	local copy = {}
-	for key, value in source :: any do
-		copy[key] = deepCopy(value)
+	return object
+end
+
+local function update<T, K>(object: T & {}, key: K & keyof<T>, fn: (NonNilable<index<T, K>>) -> index<T, K>?): T
+	local value: unknown = object[key]
+	if value ~= nil then
+		local newValue = fn(value :: K)
+		if newValue ~= value then
+			object = table.clone(object)
+			object[key] = newValue
+		end
 	end
-	return copy
+	return object
 end
 
 return {
 	map = map,
 	filter = filter,
 	keys = keys,
-	reconcile = reconcile,
-	deepCopy = deepCopy,
+	set = set,
+	delete = delete,
+	update = update,
 }

@@ -6,12 +6,16 @@ local types = require("../../shared/types")
 
 type Account = types.Account
 
-Charm.observe(accountStore.getAccounts, function(account: Account, username: string): (() -> ())?
+Charm.observe(accountStore.getAccounts, function(initialAccount: Account, username: string): (() -> ())?
 	local player = Players:FindFirstChild(username) :: Player?
 
 	if not player then
 		return nil
 	end
+
+	local getAccount = Charm.computed(function(prevAccount: Account?)
+		return accountStore.getAccount(username) or prevAccount or initialAccount
+	end)
 
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"
@@ -22,6 +26,7 @@ Charm.observe(accountStore.getAccounts, function(account: Account, username: str
 	gold.Parent = leaderstats
 
 	Charm.effect(function()
+		local account = getAccount()
 		gold.Value = account.gold
 	end)
 
