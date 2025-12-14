@@ -9,7 +9,7 @@ local remotes = require("../../shared/remotes")
 local function onPlayerAdded(player: Player)
 	CharmSync.server.addSignalsToClient(player, {
 		fishing = fishingStore.getFishers,
-		[player.Name] = Charm.computed(function()
+		[`account-{player.Name}`] = Charm.computed(function()
 			return accountStore.getAccount(player.Name)
 		end),
 	})
