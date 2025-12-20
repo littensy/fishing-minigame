@@ -15,20 +15,20 @@ local function accountChanged(key: string, account: Account)
 	end
 end
 
--- FIXME: Remove explicit type when luau-lang/luau#1986 is resolved
-local config: Lyra.PlayerStoreConfig<Account> = {
-	name = "PlayerData",
-	template = types.accountTemplate,
-	schema = function(data)
-		local ok, reason = schema:matches(data)
-		return ok, tostring(reason)
-	end,
-	changedCallbacks = { accountChanged },
-}
-
-if RunService:IsStudio() then
-	config.dataStoreService = Lyra.MockDataStoreService.new()
-	config.memoryStoreService = Lyra.MockMemoryStoreService.new()
+local function isAccount(value: any): (boolean, string)
+	local ok, reason = schema:matches(value)
+	return ok, tostring(reason)
 end
 
-return Lyra.createPlayerStore(config)
+return Lyra.createPlayerStore({
+	name = "PlayerData",
+	template = types.accountTemplate,
+	schema = isAccount,
+	changedCallbacks = { accountChanged } :: never,
+	memoryStoreService = if RunService:IsStudio() then Lyra.MockMemoryStoreService.new() else nil,
+	dataStoreService = if RunService:IsStudio() then Lyra.MockDataStoreService.new() else nil,
+	useDSSLocking = nil,
+	migrationSteps = nil,
+	importLegacyData = nil,
+	logCallback = nil,
+})

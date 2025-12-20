@@ -2,37 +2,38 @@ local HttpService = game:GetService("HttpService")
 
 local fishes = require("../shared/fishes")
 local fishingStore = require("../shared/stores/fishingStore")
+local objects = require("../shared/utils/objects")
 local store = require("@self/store")
 local types = require("../shared/types")
 
 type Account = types.Account
-type Writable<T> = types.Writable<T>
 
 local function sellFish(player: Player, uniqueId: string)
-	return store:update(player, function(account: Writable<Account>)
+	return store:updateImmutable(player, function(account)
 		local fish = account.fishes[uniqueId]
 
-		if fish then
-			account.fishes[uniqueId] = nil
-			account.gold += fishes.getFishValue(fish)
-			return true
-		else
+		if not fish then
 			return false
 		end
+
+		return objects.join(account, {
+			fishes = objects.delete(account.fishes, uniqueId),
+			gold = account.gold + fishes.getFishValue(fish),
+		})
 	end)
 end
 
 local function addReeledFish(player: Player)
-	return store:update(player, function(account: Writable<Account>)
+	return store:updateImmutable(player, function(account)
 		local fisher = fishingStore.getFisher(player.Name)
 
-		if fisher and fisher.fish then
-			local uniqueId = HttpService:GenerateGUID(false)
-			account.fishes[uniqueId] = fisher.fish
-			return true
-		else
+		if not fisher or not fisher.fish then
 			return false
 		end
+
+		return objects.join(account, {
+			fishes = objects.set(account.fishes, HttpService:GenerateGUID(false), fisher.fish),
+		})
 	end)
 end
 

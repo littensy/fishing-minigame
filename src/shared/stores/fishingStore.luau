@@ -59,12 +59,13 @@ end
 
 local function castRod(username: string, rodId: string, power: number, seed: number)
 	setFishers(function(state: Fishers)
-		local fisher: Fisher = {
+		return objects.set(state, username, {
 			seed = seed,
 			castPower = power,
 			rodId = rodId,
-		}
-		return objects.set(state, username, fisher)
+			poolId = nil,
+			fish = nil,
+		})
 	end)
 end
 

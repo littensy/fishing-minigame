@@ -11,6 +11,23 @@ type function NonNilable(ty: type): type
 	return union or ty
 end
 
+type function PartialImpl(ty: type): type
+	local result = types.copy(ty)
+	for key, property in ty:properties() do
+		if property.read then
+			result:setreadproperty(key, types.unionof(property.read, types.singleton(nil)))
+		end
+		if property.write then
+			result:setwriteproperty(key, types.unionof(property.write, types.singleton(nil)))
+		end
+	end
+	return result
+end
+
+-- This intersection allows nilable properties to be omitted instead of
+-- explicitly set to nil
+type Partial<T> = PartialImpl<T> & { [any]: nil }
+
 local function map<K, VI, VO>(object: { [K]: VI }, fn: (NonNilable<VI>, K) -> VO): { [K]: NonNilable<VO> }
 	local result: { [K]: VO } = {}
 	for key, value in object do
@@ -65,6 +82,22 @@ local function update<T, K>(object: T & {}, key: K & keyof<T>, fn: (NonNilable<i
 	return object
 end
 
+local function join<T>(object: T & {}, source: Partial<T>?): T
+	if not source then
+		return object
+	end
+	local result = object
+	for key, value in source :: { [any]: any } do
+		if result[key] ~= value then
+			if result == object then
+				result = table.clone(object) :: never
+			end
+			result[key] = value
+		end
+	end
+	return result
+end
+
 return {
 	map = map,
 	filter = filter,
@@ -72,4 +105,5 @@ return {
 	set = set,
 	delete = delete,
 	update = update,
+	join = join,
 }
