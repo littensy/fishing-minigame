@@ -12,6 +12,9 @@ local function analyze()
 		"analyze",
 		"--sourcemap=sourcemap.json",
 		"--ignore=**/submodules/**",
+		-- FIXME: Temporary workaround for luau-lsp analyzing non-existent
+		-- files outside of the project root
+		"--ignore=../../../../..",
 		"--base-luaurc=.luaurc",
 		"--definitions=roblox.d.luau",
 		"--no-flags-enabled",
@@ -35,8 +38,15 @@ local function analyze()
 
 	table.insert(args, "src")
 
+	fs.writestringtofile(
+		"roblox.d.luau",
+		net.request("https://luau-lsp.pages.dev/globalTypes.None.d.luau", { method = "GET" }).body
+	)
+
 	local result = process.run(args)
 	local stderr = string.gsub(result.stderr, "Unknown FFlag[^\n]+\n", "")
+
+	fs.remove("roblox.d.luau")
 
 	print(stderr)
 
@@ -47,14 +57,7 @@ end
 
 process.run({ "rojo", "sourcemap", "--output=sourcemap.json" }, { stdio = "inherit" })
 
-fs.writestringtofile(
-	"roblox.d.luau",
-	net.request("https://luau-lsp.pages.dev/globalTypes.None.d.luau", { method = "GET" }).body
-)
-
 analyze()
-
-fs.remove("roblox.d.luau")
 
 process.run({ "selene", "src" }, { stdio = "inherit" })
 

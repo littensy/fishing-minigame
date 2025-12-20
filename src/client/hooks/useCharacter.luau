@@ -10,10 +10,8 @@ local function useCharacter(): () -> Model?
 		character(model)
 	end)
 
-	useEventListener(Players.LocalPlayer.CharacterRemoving, function(model: Model)
-		if character() == model then
-			character(nil)
-		end
+	useEventListener(Players.LocalPlayer.CharacterRemoving, function()
+		character(nil)
 	end)
 
 	return character
