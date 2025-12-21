@@ -25,6 +25,10 @@ type Instances = {
 	UIListLayout: UIListLayout,
 }
 
+type AnyInstance = Instance
+
+type AnyProps = { [any]: any }
+
 type function Properties(instance: type?)
 	local properties = types.newtable()
 
@@ -32,18 +36,11 @@ type function Properties(instance: type?)
 		for i, v in instance:properties() do
 			local connector = v.read and v.read.tag == "table" and v.read:readproperty(types.singleton("Connect"))
 			if connector then
-				if not connector then
-					continue
-				end
 				local params = connector:parameters().head
-				if not params then
-					continue
+				local listener = params and params[2]
+				if listener then
+					properties:setproperty(i, types.optional(listener))
 				end
-				local listener = params[2]
-				if not listener then
-					continue
-				end
-				properties:setproperty(i, types.optional(listener))
 			elseif v.write then
 				properties:setproperty(
 					i,
@@ -60,33 +57,22 @@ type function Properties(instance: type?)
 	return properties
 end
 
-type AnyInstance = Instance
-
-type AnyProps = { [any]: any }
-
-type function CreateResult(name: type, props: type)
-	local instance = Instances:readproperty(name)
-	if props and props:is("table") then
-		return instance or AnyInstance
-	elseif instance then
+type function CreateResult(name: type)
+	local instance = if name ~= types.unknown then Instances:readproperty(name) else nil
+	if instance then
 		return types.newfunction({ head = { Properties(instance) } }, { head = { instance } })
 	else
 		return types.newfunction({ head = { AnyProps } }, { head = { AnyInstance } })
 	end
 end
 
-type Create = <Name, Props>(
-	Name | keyof<Instances>,
-	...(Props & Properties<index<Instances, Name>>)
-) -> CreateResult<Name, Props>
-
-local create = Vide.create :: Create
+type Create = <Name>(Name | keyof<Instances>) -> CreateResult<Name>
 
 return setmetatable({
 	version = Vide.version,
 	root = Vide.root,
 	mount = Vide.mount,
-	create = create,
+	create = Vide.create :: Create,
 	source = Vide.source,
 	effect = Vide.effect,
 	derive = Vide.derive,
