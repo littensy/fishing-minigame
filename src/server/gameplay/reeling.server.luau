@@ -22,11 +22,11 @@ local function validateCatch(options: MinigameOptions, replayData: buffer): Simu
 	return replay.simulate(frames, inputs, options)
 end
 
-Charm.observe(fishingStore.getFishersReeling, function(fisher: FisherReeling, username: string): (() -> ())?
+Charm.observe(fishingStore.getFishersReeling, function(fisher: FisherReeling, username: string)
 	local player = Players:FindFirstChild(username)
 
 	if not player or not player:IsA("Player") then
-		return nil
+		return
 	end
 
 	local options: MinigameOptions = {

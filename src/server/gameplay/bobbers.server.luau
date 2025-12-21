@@ -51,12 +51,12 @@ local function createBobber(character: Model): BobberInstance
 	return bobber :: BobberInstance
 end
 
-Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string): (() -> ())?
+Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string)
 	local player = Players:FindFirstChild(username) :: Player?
 	local character = player and player.Character
 
 	if not character then
-		return nil
+		return
 	end
 
 	local bobber = createBobber(character)

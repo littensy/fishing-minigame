@@ -6,11 +6,11 @@ local types = require("../../shared/types")
 
 type Account = types.Account
 
-Charm.observe(accountStore.getAccounts, function(initialAccount: Account, username: string): (() -> ())?
+Charm.observe(accountStore.getAccounts, function(initialAccount: Account, username: string)
 	local player = Players:FindFirstChild(username) :: Player?
 
 	if not player then
-		return nil
+		return
 	end
 
 	local getAccount = Charm.computed(function(prevAccount: Account?)
