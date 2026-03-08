@@ -11,7 +11,7 @@ type function NonNilable(ty: type): type
 	return union or ty
 end
 
-type function PartialImpl(ty: type): type
+type function Partial(ty: type): type
 	local result = types.copy(ty)
 	for key, property in ty:properties() do
 		if property.read then
@@ -23,10 +23,6 @@ type function PartialImpl(ty: type): type
 	end
 	return result
 end
-
--- This intersection allows nilable properties to be omitted instead of
--- explicitly set to nil
-type Partial<T> = PartialImpl<T> & { [any]: nil }
 
 local function map<K, VI, VO>(object: { [K]: VI }, fn: (NonNilable<VI>, K) -> VO): { [K]: NonNilable<VO> }
 	local result: { [K]: VO } = {}

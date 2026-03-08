@@ -10,9 +10,13 @@ local function connectRod(player: Player, rodId: string?): (() -> ())?
 	end
 
 	local castRod = remotes.castRod.OnServerEvent:Connect(function(sender, power)
+		if sender ~= player then
+			return
+		end
+
 		remotes.assert(remotes.castRod, power)
 
-		if sender == player and not fishingStore.isFishing(player.Name) then
+		if not fishingStore.isFishing(player.Name) then
 			fishingStore.castRod(player.Name, rodId, power, tick())
 		end
 	end)

@@ -15,12 +15,7 @@ type SimulationResult = replay.SimulationResult
 local TIME_LENIENCY = 1
 local MAX_PLAY_TIME = 60 * 5
 
-type FishingResult = SimulationResult | "cancelled"
-
-local function validateCatch(options: MinigameOptions, replayData: buffer): SimulationResult
-	local frames, inputs = replay.decodeReplay(replayData)
-	return replay.simulate(frames, inputs, options)
-end
+type GameOutcome = SimulationResult | "cancelled"
 
 Charm.observe(fishingStore.getFishersReeling, function(fisher: FisherReeling, username: string)
 	local player = Players:FindFirstChild(username)
@@ -35,44 +30,49 @@ Charm.observe(fishingStore.getFishersReeling, function(fisher: FisherReeling, us
 		fish = fishes.getFish(fisher.fish.fishId),
 	}
 
-	local bestResult, minimumTime = replay.simulatePerfectGame(options)
 	local startTime = os.clock()
-	local ended = false
+	local bestResult, minimumTime = replay.simulatePerfectGame(options)
+	local outcome: GameOutcome = "cancelled"
 
-	local function shouldCheckSuccess()
+	local function shouldReplayCatch()
 		return bestResult == "success" and (os.clock() - startTime + TIME_LENIENCY) >= minimumTime
 	end
 
-	local function endGame(result: FishingResult)
-		if not ended then
-			ended = true
-
-			if result == "success" then
-				accounts.addReeledFish(player)
-			end
-
-			fishingStore.stopFishing(username)
-			remotes.caughtFish:FireAllClients(player, Charm.toRaw(fisher).fish, result == "success")
-		end
+	local function endGame(reason: GameOutcome)
+		outcome = reason
+		fishingStore.stopFishing(username)
 	end
 
 	local catchFish = remotes.catchFish.OnServerEvent:Connect(function(sender, replayData)
+		if player ~= sender then
+			return
+		end
+
 		remotes.assert(remotes.catchFish, replayData)
 
-		if player == sender then
-			endGame(if shouldCheckSuccess() then validateCatch(options, replayData) else "fail")
+		if shouldReplayCatch() then
+			local frames, inputs = replay.decodeReplay(replayData)
+			endGame(replay.simulate(frames, inputs, options))
+		else
+			endGame("fail")
 		end
 	end)
 
-	local thread = task.delay(MAX_PLAY_TIME, function()
+	local timeoutThread = task.delay(MAX_PLAY_TIME, function()
 		endGame("timeout")
 	end)
 
 	return function()
-		endGame("cancelled")
 		catchFish:Disconnect()
-		if coroutine.status(thread) == "suspended" then
-			task.cancel(thread)
+
+		if coroutine.status(timeoutThread) == "suspended" then
+			task.cancel(timeoutThread)
 		end
+
+		if outcome == "success" then
+			accounts.addFish(player, fisher.fish)
+		end
+
+		remotes.caughtFish:FireAllClients(player, fisher.fish, outcome == "success")
 	end
 end)

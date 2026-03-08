@@ -14,7 +14,7 @@ local analyze = process.run({
 	"analyze",
 	"--sourcemap=sourcemap.json",
 	"--ignore=**/submodules/**",
-	-- FIXME: Fix for luau-lsp analyzing files outside of the project root
+	-- FIXME: Not sure why luau-lsp reports errors at this specific path
 	"--ignore=../../../../..",
 	"--base-luaurc=.luaurc",
 	"--definitions=roblox.d.luau",

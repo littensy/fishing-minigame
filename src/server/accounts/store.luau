@@ -1,3 +1,8 @@
+--!nocheck
+
+-- FIXME: Remove nocheck when createPlayerStore() no longer incorretly reports
+-- that the code is too complex to typecheck
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -8,27 +13,21 @@ local types = require("../../shared/types")
 
 type Account = types.Account
 
-local function accountChanged(key: string, account: Account)
+local function onAccountChanged(key: string, account: Account)
 	local player = Players:GetPlayerByUserId(tonumber(key) :: number)
 	if player then
 		accountStore.setAccount(player.Name, account)
 	end
 end
 
-local function isAccount(value: any): (boolean, string)
-	local ok, reason = schema:matches(value)
-	return ok, tostring(reason)
-end
-
 return Lyra.createPlayerStore({
 	name = "PlayerData",
 	template = types.accountTemplate,
-	schema = isAccount,
-	changedCallbacks = { accountChanged } :: never,
+	schema = function(value)
+		local ok, reason = schema:matches(value)
+		return ok, tostring(reason)
+	end,
+	changedCallbacks = { onAccountChanged },
 	memoryStoreService = if RunService:IsStudio() then Lyra.MockMemoryStoreService.new() else nil,
 	dataStoreService = if RunService:IsStudio() then Lyra.MockDataStoreService.new() else nil,
-	useDSSLocking = nil,
-	migrationSteps = nil,
-	importLegacyData = nil,
-	logCallback = nil,
 })
