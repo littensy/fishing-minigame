@@ -7,7 +7,7 @@ local remotes = require("../../shared/remotes")
 
 CharmSync.client.addSignals({
 	fishing = fishingStore.setFishers,
-	[`account-{Players.LocalPlayer}`] = appStore.setAccount,
+	[`account-{Players.LocalPlayer.Name}`] = appStore.setAccount,
 } :: any)
 
 remotes.patch.OnClientEvent:Connect(function(patches)
