@@ -1,6 +1,6 @@
 --!nocheck
 
--- FIXME: Remove nocheck when createPlayerStore() no longer incorretly reports
+-- FIXME: Remove nocheck when createPlayerStore() no longer incorrectly reports
 -- that the code is too complex to typecheck
 
 local Players = game:GetService("Players")
