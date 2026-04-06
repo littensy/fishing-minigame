@@ -1,3 +1,4 @@
+local attribute = require("../utils/attribute")
 export type RodInfo = {
 	name: string,
 	description: string,
@@ -34,12 +35,14 @@ local rodsById: { [string]: RodInfo } = {
 	},
 }
 
+local rodIdAttribute = attribute<<string?>>("RodId")
+
 local function getRod(rodId: string): RodInfo
 	return assert(rodsById[rodId], `Failed to get rod {rodId}`)
 end
 
 local function getRodIdFromTool(tool: Tool): string?
-	local rodId = tool:GetAttribute("RodId")
+	local rodId = rodIdAttribute.get(tool)
 	return if type(rodId) == "string" and rodsById[rodId] then rodId else nil
 end
 

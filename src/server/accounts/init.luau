@@ -8,16 +8,16 @@ local types = require("../shared/types")
 type Fish = fishes.Fish
 type Account = types.Account
 
-local function sellFish(player: Player, uniqueId: string)
+local function sellFish(player: Player, guid: string)
 	return store:updateImmutable(player, function(account: Account)
-		local fish = account.fishes[uniqueId]
+		local fish = account.fishes[guid]
 
 		if not fish then
 			return false
 		end
 
 		return objects.join(account, {
-			fishes = objects.delete(account.fishes, uniqueId),
+			fishes = objects.delete(account.fishes, guid),
 			gold = account.gold + fishes.getFishValue(fish),
 		})
 	end)

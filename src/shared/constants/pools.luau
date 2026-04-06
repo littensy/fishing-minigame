@@ -1,3 +1,5 @@
+local attribute = require("../utils/attribute")
+
 export type PoolInfo = {
 	name: string,
 	fishes: { string },
@@ -10,12 +12,14 @@ local poolsById: { [string]: PoolInfo } = {
 	},
 }
 
+local poolIdAttribute = attribute<<string?>>("PoolId")
+
 local function getPool(poolId: string): PoolInfo
 	return assert(poolsById[poolId], `Failed to get pool {poolId}`)
 end
 
 local function getPoolIdFromInstance(instance: Instance): string?
-	local poolId = instance:GetAttribute("PoolId")
+	local poolId = poolIdAttribute.get(instance)
 	return if type(poolId) == "string" and poolsById[poolId] then poolId else nil
 end
 
