@@ -8,16 +8,20 @@ export type FisherReeling = fishingStore.FisherReeling
 
 local getAccount, setAccount = Charm.signal(types.accountTemplate)
 
+local getFisherStatus = Charm.computed(function()
+	return fishingStore.getFisherStatus(Players.LocalPlayer.Name)
+end)
+
 local isFishing = Charm.computed(function()
-	return fishingStore.isFishing(Players.LocalPlayer.Name)
+	return getFisherStatus() ~= nil
 end)
 
 local isLuring = Charm.computed(function()
-	return fishingStore.isLuring(Players.LocalPlayer.Name)
+	return getFisherStatus() == "luring"
 end)
 
 local isReeling = Charm.computed(function()
-	return fishingStore.isReeling(Players.LocalPlayer.Name)
+	return getFisherStatus() == "reeling"
 end)
 
 local function getFisher()

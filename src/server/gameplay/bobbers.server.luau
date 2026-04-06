@@ -61,8 +61,9 @@ Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string
 
 	local bobber = createBobber(character)
 
-	local isSubmerged = Charm.computed(function()
-		return fishingStore.isLuring(username) or fishingStore.isReeling(username)
+	local isBobberSubmerged = Charm.computed(function()
+		local status = fishingStore.getFisherStatus(username)
+		return status == "luring" or status == "reeling"
 	end)
 
 	local touched = bobber.Part.Touched:Connect(function(touching)
@@ -75,7 +76,7 @@ Charm.observe(fishingStore.getFishers, function(fisher: Fisher, username: string
 	end)
 
 	Charm.effect(function()
-		if isSubmerged() then
+		if isBobberSubmerged() then
 			bobber.Part.Anchored = true
 			touched:Disconnect()
 		end

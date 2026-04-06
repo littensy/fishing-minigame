@@ -21,41 +21,42 @@ export type FisherReeling = Fisher & {
 	read fish: Fish,
 }
 
+export type FisherStatus = "casting" | "luring" | "reeling"
+
 type Fishers = {
 	[string]: Fisher,
 }
 
 local getFishers, setFishers = Charm.signal({} :: Fishers)
 
-local getFishersLuring = Charm.computed(function()
-	return objects.map(getFishers(), function(fisher: Fisher): FisherLuring?
-		return if fisher.poolId ~= nil and fisher.fish == nil then fisher else nil
-	end)
-end)
-
-local getFishersReeling = Charm.computed(function()
-	return objects.map(getFishers(), function(fisher: Fisher): FisherReeling?
-		return if fisher.poolId ~= nil and fisher.fish ~= nil then fisher else nil
-	end)
-end)
-
 local function getFisher(username: string): Fisher?
 	return getFishers()[username]
 end
 
-local function isFishing(username: string): boolean
-	return getFishers()[username] ~= nil
+local function getFisherStatus(username: string): FisherStatus?
+	local fisher = getFisher(username)
+	if not fisher then
+		return nil
+	elseif fisher.poolId == nil then
+		return "casting"
+	elseif fisher.fish == nil then
+		return "luring"
+	else
+		return "reeling"
+	end
 end
 
-local function isLuring(username: string): boolean
-	local fisher = getFisher(username)
-	return fisher ~= nil and fisher.poolId ~= nil and fisher.fish == nil
-end
+local getFishersLuring = Charm.computed(function()
+	return objects.map(getFishers(), function(fisher: Fisher, username: string): FisherLuring?
+		return if getFisherStatus(username) == "luring" then fisher :: FisherLuring else nil
+	end)
+end)
 
-local function isReeling(username: string): boolean
-	local fisher = getFisher(username)
-	return fisher ~= nil and fisher.poolId ~= nil and fisher.fish ~= nil
-end
+local getFishersReeling = Charm.computed(function()
+	return objects.map(getFishers(), function(fisher: Fisher, username: string): FisherReeling?
+		return if getFisherStatus(username) == "reeling" then fisher :: FisherReeling else nil
+	end)
+end)
 
 local function castRod(username: string, rodId: string, power: number, seed: number)
 	setFishers(function(state: Fishers)
@@ -97,9 +98,7 @@ return {
 	getFishersLuring = getFishersLuring,
 	getFishersReeling = getFishersReeling,
 	getFisher = getFisher,
-	isFishing = isFishing,
-	isLuring = isLuring,
-	isReeling = isReeling,
+	getFisherStatus = getFisherStatus,
 	castRod = castRod,
 	setLuringPool = setLuringPool,
 	setReelingFish = setReelingFish,

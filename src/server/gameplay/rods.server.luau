@@ -16,7 +16,7 @@ local function connectRod(player: Player, rodId: string?): (() -> ())?
 
 		remotes.assert(remotes.castRod, power)
 
-		if not fishingStore.isFishing(player.Name) then
+		if fishingStore.getFisher(player.Name) == nil then
 			fishingStore.castRod(player.Name, rodId, power, tick())
 		end
 	end)
