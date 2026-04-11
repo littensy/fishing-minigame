@@ -1,6 +1,6 @@
 [tools]
 rojo = "rojo-rbx/rojo@7.6.1"
-luau-lsp = "JohnnyMorganz/luau-lsp@1.63.0"
+luau-lsp = "JohnnyMorganz/luau-lsp@1.66.0"
 selene = "Kampfkarren/selene@0.30.1"
-stylua = "JohnnyMorganz/stylua@2.4.0"
+stylua = "JohnnyMorganz/stylua@2.4.1"
 lute = "luau-lang/lute@0.1.0-nightly.20260307"
